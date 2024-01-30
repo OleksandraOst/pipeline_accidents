@@ -96,10 +96,10 @@ To Do:
     B. Transfer data_process functions from __main__.py to transformer.py
 
 2. Make Geospatial Plot more versatile: 
-    A. Should not depend on the order of datafrmes    
-    B. Plots should be available for both contries together as well as separate plot for each country              
+    A. Should not depend on the order of data frames    
+    B. Plots should be available for both countries together as well as separate plots for each country              
                         
-""""
+"""
    
 
 
