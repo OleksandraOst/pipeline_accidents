@@ -29,7 +29,6 @@ def boxes_distr(df_list: list, col_list: list, labels: str, out_name: str) -> No
     plt.close()
 
 
-
 def shapiro_norm(df: pd.DataFrame, years: list, column: str) -> None:
     """
     This function tests normality of the data using Shapiro–Wilk test.
