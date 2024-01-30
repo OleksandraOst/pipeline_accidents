@@ -30,7 +30,7 @@ def data_process_canada(file_name_canada_list: list, new_df_name: str) -> None:
     for value, label in zip(values_list,new_labels_list):
         relabled_df = transformer.relabel(relabled_df,'What happened category',value,label) 
 
-    loader.load(relabled_df,'data/final_df_canada.csv')
+    loader.load(relabled_df, 'data/'+new_df_name+'.csv')
 
 def data_process_usa(file_name_usa_list: list, new_df_name: str, before_year: str) -> None:
     """
