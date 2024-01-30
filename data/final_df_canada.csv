@@ -1,0 +1,48 @@
+Released substance type,Released volume (m3),Substance carried,Latitude,Longitude,Year,What happened category
+Crude Oil - Sour,25.0,Crude Oil,52.13984,-109.80493,2010,Equipment Failure
+Crude Oil - Sweet,5.0,Crude Oil,50.1731181,-111.165654,2019,External Interference
+Crude Oil - Sweet,50.0,Crude Oil,51.64917,-108.21167,2020,"External Interference, Incorrect Operation"
+Lube Oil,0.0001,"Crude Oil, Crude Oil Sour Heavy, Crude Oil Sour Light, Crude Oil Sweet Heavy, Crude Oil Sweet Light",49.726719,-121.011257,2022,Incorrect Operation
+Crude Oil - Synthetic,5.0,Crude Oil,42.952425,-82.37243611,2022,Corrosion and Cracking
+Crude Oil - Sweet,17.8,"Crude Oil, Crude Oil Sour Heavy, Crude Oil Sour Light, Crude Oil Sweet Heavy, Crude Oil Sweet Light",49.615781,-121.034754,2013,Defect and Deterioration
+Drilling Fluid,0.3,Crude Oil,49.195695,-122.745813,2023,Other Causes
+Natural Gas Liquids,0.0005,Crude Oil,51.45,-107.38611111,2015,"External Interference, Incorrect Operation"
+Natural Gas Liquids,0.0001,Crude Oil,50.482928,-104.586263,2015,"Equipment Failure, External Interference, Incorrect Operation"
+Natural Gas Liquids,0.0076,Crude Oil,49.749362,-101.244345,2015,External Interference
+Natural Gas Liquids,0.0001,Crude Oil,52.63822644,-111.27864571,2016,Equipment Failure
+Natural Gas Liquids,0.001,"Condensate, Crude Oil, Natural Gas Liquids",55.94382999,-120.19326999,2017,"External Interference, Incorrect Operation"
+Natural Gas Liquids,0.001,Crude Oil,50.62028,-105.24194,2017,External Interference
+Crude Oil - Sweet,4.8,Crude Oil,51.31303645,-120.17762182,2018,Corrosion and Cracking
+Crude Oil - Synthetic,175.0,Crude Oil,50.29138341,-103.8103553,2009,Corrosion and Cracking
+Crude Oil - Synthetic,10.0,Crude Oil,53.54740268,-113.35571374,2017,"Equipment Failure, External Interference"
+Crude Oil - Sweet,1.8,Crude Oil,44.06958,-77.92945,2009,Equipment Failure
+Drilling Fluid,74.0,"Crude Oil, Crude Oil Sour Heavy, Crude Oil Sour Light, Crude Oil Sweet Heavy, Crude Oil Sweet Light",52.0652,-119.31508,2019,"External Interference, Incorrect Operation"
+Crude Oil - Sweet,50.0,Crude Oil,50.07461053,-100.00036153,2019,Corrosion and Cracking
+Crude Oil - Synthetic,8.0,Crude Oil,53.54740268,-113.35571374,2019,Corrosion and Cracking
+Crude Oil - Sweet,2.0,"Crude Oil, Crude Oil Sour Heavy, Crude Oil Sour Light, Crude Oil Sweet Heavy, Crude Oil Sweet Light",53.545709,-113.365488,2019,"External Interference, Incorrect Operation"
+Crude Oil - Sweet,190.0,"Crude Oil, Crude Oil Sour Heavy, Crude Oil Sour Light, Crude Oil Sweet Heavy, Crude Oil Sweet Light",49.06567935,-122.15971426,2020,Defect and Deterioration
+Crude Oil - Synthetic,2.0,Crude Oil,49.01667,-97.55556,2022,"Equipment Failure, External Interference"
+Crude Oil - Sweet,166.0,Crude Oil,53.541584,-113.354894,2022,"Equipment Failure, External Interference, Natural Force Damage"
+Crude Oil - Sweet,5.0,Crude Oil,49.017818,-97.55738113,2022,"Equipment Failure, External Interference"
+Natural Gas Liquids,0.0,Crude Oil,51.865344,-109.026045,2013,Equipment Failure
+Natural Gas Liquids,0.0001,Crude Oil,51.865344,-109.026045,2013,Incorrect Operation
+Natural Gas Liquids,0.0001,Crude Oil,53.547403,-113.355714,2014,"Equipment Failure, Incorrect Operation"
+Crude Oil - Sweet,4.0,Crude Oil,50.481964,-104.568289,2015,"External Interference, Incorrect Operation"
+Natural Gas - Sweet,0.001,Crude Oil,52.635343,-111.267485,2014,Equipment Failure
+Crude Oil - Sour,2.5,Crude Oil,53.542908,-113.36445,2014,Corrosion and Cracking
+Crude Oil - Sweet,173.6,Crude Oil,50.482408,-104.575209,2014,Equipment Failure
+Diesel Fuel,2.3,"Crude Oil, Crude Oil Sour Heavy, Crude Oil Sour Light, Crude Oil Sweet Heavy, Crude Oil Sweet Light",53.54290845,-113.36445011,2016,Defect and Deterioration
+Natural Gas Liquids,0.002,Crude Oil,51.867982,-109.033349,2017,Incorrect Operation
+Crude Oil - Sweet,6.0,Crude Oil,52.64186166,-111.26426221,2019,Incorrect Operation
+Crude Oil - Sweet,29.0,Crude Oil,50.48066052,-105.86703804,2020,External Interference
+Natural Gas Liquids,0.0,Crude Oil,52.635343,-111.267485,2011,Corrosion and Cracking
+Natural Gas Liquids,0.015,Crude Oil,49.539039,-99.288393,2015,"External Interference, Incorrect Operation"
+Natural Gas Liquids,0.0001,Crude Oil,50.482934,-104.586279,2015,"Equipment Failure, External Interference, Incorrect Operation"
+Natural Gas Liquids,0.001,Crude Oil,52.933313,-112.082122,2016,Incorrect Operation
+Crude Oil - Sweet,3.0,Crude Oil,49.7,-101.2,2016,Incorrect Operation
+Condensate,988.0,Crude Oil,53.51651,-113.37012,2017,"External Interference, Incorrect Operation"
+Natural Gas Liquids,0.01,Crude Oil,51.875,-109.033,2017,External Interference
+Crude Oil - Sweet,66.5,Crude Oil,51.48953478,-111.16579086,2020,"External Interference, Incorrect Operation"
+Crude Oil - Sweet,259.0,Crude Oil,62.70880556,-123.079889,2011,Incorrect Operation
+Crude Oil - Sweet,4.0,Crude Oil,45.72466,-73.69588,2011,Incorrect Operation
+Hydraulic Fluid,0.035,Crude Oil,49.17749,-122.61864,2023,Incorrect Operation
