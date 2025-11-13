@@ -97,7 +97,7 @@ def _cause_incidents_over_years(df: pd.DataFrame, country: str) -> None:
     plt.close()
     
 
-def incident_location(df_canada: pd.DataFrame, df_usa: pd.DataFrame):
+def incident_location(df_canada_name: pd.DataFrame, df_usa_name: pd.DataFrame):
     """
     This function creates plot of accident locations in Canada and the USA.
     Args:
@@ -106,6 +106,12 @@ def incident_location(df_canada: pd.DataFrame, df_usa: pd.DataFrame):
     Returns: 
         None
     """
+
+    df_canada = pd.read_csv(df_canada_name)
+    print(df_canada)
+    df_usa = pd.read_csv(df_usa_name)
+    print(df_usa)
+
     values_canada = df_canada['Released volume (m3)'].tolist()
     values_usa = df_usa['RELEASE M3'].tolist()
 
@@ -139,5 +145,6 @@ def make_plots(df: pd.DataFrame, country:str):
     _incident_causes_plot(df, country)
     _incidents_over_years(df, country)
     _cause_incidents_over_years(df,country)
+
   
 
