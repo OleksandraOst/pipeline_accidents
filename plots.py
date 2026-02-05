@@ -125,13 +125,13 @@ def incident_location(df_canada_name: pd.DataFrame, df_usa_name: pd.DataFrame):
                    symbol_sequence = ['square', 'diamond', 'cross', 'x', 'triangle-up', 'triangle-down', 'triangle-left', 'triangle-right', 'triangle-ne', 'arrow-bar-right'],
                      symbol = 'Released substance type',
                     color=color_canada, range_color=(min(colors),max(colors)),
-                    color_continuous_scale=px.colors.sequential.Plasma)
+                    color_continuous_scale=px.colors.sequential.Viridis)
 
     
     fig2 = px.scatter_geo(df_usa,  scope='north america', lat = 'LOCATION_LATITUDE', lon = 'LOCATION_LONGITUDE',
                 hover_name = 'COMMODITY_RELEASED_TYPE',  symbol = 'COMMODITY_RELEASED_TYPE',
                 color=color_usa, range_color=(min(colors),max(colors)),
-                color_continuous_scale=px.colors.sequential.Plasma)
+                color_continuous_scale=px.colors.sequential.Viridis)
    
     
     fig.add_trace(fig2.data[0])
