@@ -84,10 +84,11 @@ def main():
     df_usa_2010_2024 = extractor.extract_df([final_data_usa_2010_2024], 'USA', 'analysis')  
 
 
-    labels = ['1986-2001','2002-2009', '2010-2024']
-    calc_and_stats.boxes_distr([df_usa_1986_2002,df_usa_2002_2009,df_usa_2010_2024], ['IDATE', 'IYEAR', 'IYEAR'], labels, out_name = 'AllUSA') 
-
-
+    # labels = ['1986-2001','2002-2009', '2010-2024']
+    # calc_and_stats.boxes_distr([df_usa_1986_2002,df_usa_2002_2009,df_usa_2010_2024], ['IDATE', 'IYEAR', 'IYEAR'], labels, out_name = 'AllUSA') 
+    
+    plots.incident_location(final_data_canada, final_data_usa_2010_2024)
+main()
 """
 To Do: 
 
