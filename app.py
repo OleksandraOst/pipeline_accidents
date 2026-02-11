@@ -3,27 +3,36 @@ import pandas as pd
 import plotly.express as px
 import numpy as np
 
+# ===========================
+# Page config & style
+# ===========================
+
 st.set_page_config(
-    page_title="Pipeline Accidents Map",
+    page_title="Pipeline Accidents Dashboard",
     layout="wide"
 )
 
+PLOT_TEMPLATE = "plotly_white"
+
 st.title("🛢️ Pipeline Accidents in North America")
 st.markdown(
-    "Interactive map of crude oil pipeline incidents with year and volume filtering. "
-    "Marker size reflects spill magnitude relative to the full dataset."
+    """
+    Interactive analysis of crude oil pipeline incidents in Canada and the USA.
+
+    ⚠️ Counts are shown both as **absolute values** and **normalized per pipeline length**
+    to enable fair comparison.
+    """
 )
 
-# ---------------------------
+# ===========================
 # Load data
-# ---------------------------
+# ===========================
 
 @st.cache_data
 def load_data():
     df_canada = pd.read_csv("data/final_df_canada.csv")
     df_usa = pd.read_csv("data/final_df_usa_2010_2024.csv")
 
-    # Standardize columns
     df_canada = df_canada.rename(columns={
         "Latitude": "lat",
         "Longitude": "lon",
@@ -45,7 +54,6 @@ def load_data():
     df["year"] = df["year"].astype(int)
     df = df.dropna(subset=["lat", "lon", "volume"])
 
-    # Cap volume ONLY for marker sizing (performance + readability)
     df["volume_capped"] = df["volume"].clip(upper=10_000)
 
     return df
@@ -53,19 +61,28 @@ def load_data():
 
 df = load_data()
 
-# ---------------------------
-# GLOBAL size reference (key fix)
-# ---------------------------
+# ===========================
+# Pipeline length assumptions (km)
+# ===========================
+
+PIPELINE_LENGTH_KM = {
+    "USA": 3_000_000,
+    "Canada": 840_000
+}
+
+NORMALIZATION_FACTOR = 10_000  # incidents per 10k km
+
+# ===========================
+# Global marker sizing
+# ===========================
 
 GLOBAL_MAX_VOLUME = df["volume_capped"].max()
-
-# Plotly sizing formula recommendation
 SIZE_MAX = 18
 SIZE_REF = 2.0 * GLOBAL_MAX_VOLUME / (SIZE_MAX ** 2)
 
-# ---------------------------
-# Sidebar controls
-# ---------------------------
+# ===========================
+# Sidebar filters
+# ===========================
 
 st.sidebar.header("Filters")
 
@@ -74,31 +91,23 @@ country_option = st.sidebar.selectbox(
     ["Canada", "USA", "Canada + USA"]
 )
 
-# Year slider
-min_year = int(df["year"].min())
-max_year = int(df["year"].max())
-
 year_range = st.sidebar.slider(
     "Year range",
-    min_value=min_year,
-    max_value=max_year,
-    value=(min_year, max_year)
+    int(df["year"].min()),
+    int(df["year"].max()),
+    (int(df["year"].min()), int(df["year"].max()))
 )
-
-# Volume slider (filter only — does NOT affect size scale)
-min_vol = int(df["volume"].min())
-max_vol = int(df["volume"].max())
 
 volume_range = st.sidebar.slider(
     "Released volume (m³)",
-    min_value=min_vol,
-    max_value=max_vol,
-    value=(min_vol, max_vol)
+    int(df["volume"].min()),
+    int(df["volume"].max()),
+    (int(df["volume"].min()), int(df["volume"].max()))
 )
 
-# ---------------------------
+# ===========================
 # Filter data
-# ---------------------------
+# ===========================
 
 df_plot = df[
     (df["year"] >= year_range[0]) &
@@ -110,16 +119,16 @@ df_plot = df[
 if country_option != "Canada + USA":
     df_plot = df_plot[df_plot["country"] == country_option]
 
-# Sample if too many points (performance safeguard)
-MAX_POINTS = 3000
-if len(df_plot) > MAX_POINTS:
-    df_plot = df_plot.sample(MAX_POINTS, random_state=42)
+if len(df_plot) > 3000:
+    df_plot = df_plot.sample(3000, random_state=42)
 
-# ---------------------------
-# Map
-# ---------------------------
+# ===========================
+# MAP
+# ===========================
 
-fig = px.scatter_mapbox(
+st.subheader("🗺️ Geographic distribution")
+
+fig_map = px.scatter_mapbox(
     df_plot,
     lat="lat",
     lon="lon",
@@ -128,18 +137,18 @@ fig = px.scatter_mapbox(
     color_continuous_scale="Viridis",
     zoom=2,
     mapbox_style="carto-positron",
+    height=650,
+    template=PLOT_TEMPLATE,
     hover_data={
         "country": True,
         "year": True,
         "volume": ":,.0f",
         "lat": False,
         "lon": False
-    },
-    height=720
+    }
 )
 
-# 🔒 Lock marker size to GLOBAL scale
-fig.update_traces(
+fig_map.update_traces(
     marker=dict(
         sizemode="area",
         sizeref=SIZE_REF,
@@ -147,27 +156,212 @@ fig.update_traces(
     )
 )
 
-fig.update_layout(
+fig_map.update_layout(
     coloraxis_colorbar_title="Released volume (m³)",
     margin=dict(l=0, r=0, t=40, b=0)
 )
 
-st.plotly_chart(fig, use_container_width=True)
+st.plotly_chart(fig_map, use_container_width=True)
 
-# ---------------------------
-# Summary stats
-# ---------------------------
+# ===========================
+# SUMMARY
+# ===========================
 
 st.subheader("📊 Summary")
 
-col1, col2, col3 = st.columns(3)
+c1, c2, c3 = st.columns(3)
+c1.metric("Incidents", f"{len(df_plot):,}")
+c2.metric("Total volume (m³)", f"{df_plot['volume'].sum():,.0f}")
+c3.metric("Year range", f"{year_range[0]} – {year_range[1]}")
 
-col1.metric("Number of incidents", f"{len(df_plot):,}")
-col2.metric(
-    "Total volume released (m³)",
-    f"{df_plot['volume'].sum():,.0f}"
+# ===========================
+# ANALYSIS
+# ===========================
+
+st.markdown("---")
+st.header("📈 Comparative Analysis")
+
+# ---------------------------
+# Incidents per year (absolute)
+# ---------------------------
+
+st.subheader("Incidents per year (absolute)")
+
+abs_year = (
+    df.groupby(["year", "country"])
+      .size()
+      .reset_index(name="count")
 )
-col3.metric(
-    "Year range",
-    f"{year_range[0]} – {year_range[1]}"
+
+fig_abs = px.line(
+    abs_year,
+    x="year",
+    y="count",
+    color="country",
+    markers=True,
+    template=PLOT_TEMPLATE
+)
+
+fig_abs.update_layout(
+    yaxis_title="Number of incidents",
+    xaxis_title="Year"
+)
+
+st.plotly_chart(fig_abs, use_container_width=True)
+
+# ---------------------------
+# Incidents per year (normalized)
+# ---------------------------
+
+st.subheader("Incidents per 10,000 km of pipeline")
+
+norm_year = abs_year.copy()
+norm_year["pipeline_km"] = norm_year["country"].map(PIPELINE_LENGTH_KM)
+norm_year["incidents_per_10k_km"] = (
+    norm_year["count"] / norm_year["pipeline_km"] * NORMALIZATION_FACTOR
+)
+
+fig_norm = px.line(
+    norm_year,
+    x="year",
+    y="incidents_per_10k_km",
+    color="country",
+    markers=True,
+    template=PLOT_TEMPLATE
+)
+
+fig_norm.update_layout(
+    yaxis_title="Incidents per 10,000 km",
+    xaxis_title="Year"
+)
+
+st.plotly_chart(fig_norm, use_container_width=True)
+
+# ---------------------------
+# Incidents per year (normalized, improved)
+# ---------------------------
+
+st.subheader("Incidents per 10,000 km of pipeline (volume >= 1 m³)")
+
+# Filter small incidents to reduce reporting bias
+df_filtered = df[df["volume"] >= 1.0]
+
+# Keep only years present in both countries
+common_years = df_filtered[df_filtered["country"].isin(["USA", "Canada"])]["year"].unique()
+df_filtered = df_filtered[df_filtered["year"].isin(common_years)]
+
+# Group by year and country
+norm_year = (
+    df_filtered.groupby(["year", "country"])
+               .size()
+               .reset_index(name="count")
+)
+
+# Map pipeline lengths
+PIPELINE_LENGTH_KM = {
+    "USA": 3_000_000,
+    "Canada": 840_000
+}
+norm_year["pipeline_km"] = norm_year["country"].map(PIPELINE_LENGTH_KM)
+
+# Normalize: incidents per 10k km per year
+NORMALIZATION_FACTOR = 10_000
+norm_year["incidents_per_10k_km_per_year"] = (
+    norm_year["count"] / norm_year["pipeline_km"] * NORMALIZATION_FACTOR
+)
+
+# Add 3-year rolling average to smooth trends
+norm_year["rolling_3yr"] = norm_year.groupby("country")["incidents_per_10k_km_per_year"].transform(
+    lambda x: x.rolling(3, min_periods=1).mean()
+)
+
+# Plot
+fig_norm = px.line(
+    norm_year,
+    x="year",
+    y="rolling_3yr",
+    color="country",
+    markers=True,
+    template=PLOT_TEMPLATE
+)
+
+fig_norm.update_layout(
+    yaxis_title="Incidents per 10,000 km (3-yr rolling avg)",
+    xaxis_title="Year"
+)
+
+st.plotly_chart(fig_norm, use_container_width=True)
+
+
+
+# ---------------------------
+# Volume distribution
+# ---------------------------
+
+st.subheader("Distribution of released volumes")
+
+fig_box = px.box(
+    df,
+    x="country",
+    y="volume",
+    log_y=True,
+    template=PLOT_TEMPLATE,
+    points="outliers"
+)
+
+fig_box.update_layout(
+    yaxis_title="Released volume (m³, log scale)",
+    xaxis_title=""
+)
+
+st.plotly_chart(fig_box, use_container_width=True)
+
+
+
+
+
+# ---------------------------
+# Cumulative released volume
+# ---------------------------
+
+st.subheader("Cumulative released volume")
+
+cum_volume = (
+    df.groupby(["year", "country"])["volume"]
+      .sum()
+      .groupby(level=1)
+      .cumsum()
+      .reset_index()
+)
+
+fig_cum = px.line(
+    cum_volume,
+    x="year",
+    y="volume",
+    color="country",
+    template=PLOT_TEMPLATE
+)
+
+fig_cum.update_layout(
+    yaxis_title="Cumulative volume (m³)",
+    xaxis_title="Year"
+)
+
+st.plotly_chart(fig_cum, use_container_width=True)
+
+# ===========================
+# Interpretation
+# ===========================
+
+st.markdown(
+    """
+    ### Interpretation notes
+    - Raw incident counts are higher in the USA due to a **larger and denser pipeline network**.
+    - After normalization by pipeline length, **incident rates are more comparable**.
+    - The USA reports many small spills; Canada shows a heavier tail in released volumes.
+    
+    **Assumptions**
+    - Pipeline lengths are approximate and used for normalization only.
+    - Results should be interpreted as **relative trends**, not precise risk estimates.
+    """
 )
