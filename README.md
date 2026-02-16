@@ -9,4 +9,5 @@ To install the package please follow the instructions below:
 3. Activate the environment source by _your_environment/bin/activate
 4. Install the requirements.txt file by pip install -r _path_to_requirements.txt
 5. Run __main__.py by python __main__.py
+<img width="1358" height="673" alt="Screenshot 2026-02-16 at 18 25 07" src="https://github.com/user-attachments/assets/e5a0c0e3-96e8-462d-a0c6-1a946ccf6d7d" />
 
