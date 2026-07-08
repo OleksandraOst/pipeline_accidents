@@ -154,7 +154,7 @@ fig_map.update_layout(
     margin=dict(l=0, r=0, t=40, b=0)
 )
 
-st.plotly_chart(fig_map, use_container_width=True)
+st.plotly_chart(fig_map, width="stretch")
 
 # ===========================
 # SUMMARY
@@ -200,7 +200,7 @@ fig_abs.update_layout(
     xaxis_title="Year"
 )
 
-st.plotly_chart(fig_abs, use_container_width=True)
+st.plotly_chart(fig_abs, width="stretch")
 
 # ---------------------------
 # Incidents per year (normalized)
@@ -228,7 +228,7 @@ fig_norm.update_layout(
     xaxis_title="Year"
 )
 
-st.plotly_chart(fig_norm, use_container_width=True)
+st.plotly_chart(fig_norm, width="stretch")
 
 # ---------------------------
 # Volume distribution
@@ -250,7 +250,7 @@ fig_box.update_layout(
     xaxis_title=""
 )
 
-st.plotly_chart(fig_box, use_container_width=True)
+st.plotly_chart(fig_box, width="stretch")
 
 # ---------------------------
 # Cumulative released volume
@@ -258,7 +258,7 @@ st.plotly_chart(fig_box, use_container_width=True)
 
 st.subheader("Cumulative released volume")
 
-cum_volume = (
+cumulative_volume = (
     df.groupby(["year", "country"])["volume"]
       .sum()
       .groupby(level=1)
@@ -266,20 +266,20 @@ cum_volume = (
       .reset_index()
 )
 
-fig_cum = px.line(
-    cum_volume,
+fig_cumulative = px.line(
+    cumulative_volume,
     x="year",
     y="volume",
     color="country",
     template=PLOT_TEMPLATE
 )
 
-fig_cum.update_layout(
+fig_cumulative.update_layout(
     yaxis_title="Cumulative volume (m³)",
     xaxis_title="Year"
 )
 
-st.plotly_chart(fig_cum, use_container_width=True)
+st.plotly_chart(fig_cumulative, width="stretch")
 
 # ===========================
 # Interpretation
