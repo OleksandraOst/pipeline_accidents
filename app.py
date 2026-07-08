@@ -15,14 +15,7 @@ st.set_page_config(
 PLOT_TEMPLATE = "plotly_white"
 
 st.title("🛢️ Pipeline Accidents in North America")
-st.markdown(
-    """
-    Interactive analysis of crude oil pipeline incidents in Canada and the USA.
 
-    ⚠️ Counts are shown both as **absolute values** and **normalized per pipeline length**
-    to enable fair comparison.
-    """
-)
 
 # ===========================
 # Load data
@@ -126,7 +119,7 @@ if len(df_plot) > 3000:
 # MAP
 # ===========================
 
-st.subheader("🗺️ Geographic distribution")
+st.subheader("🗺️ Geospatial distribution")
 
 fig_map = px.scatter_mapbox(
     df_plot,
@@ -238,63 +231,6 @@ fig_norm.update_layout(
 st.plotly_chart(fig_norm, use_container_width=True)
 
 # ---------------------------
-# Incidents per year (normalized, improved)
-# ---------------------------
-
-st.subheader("Incidents per 10,000 km of pipeline (volume >= 1 m³)")
-
-# Filter small incidents to reduce reporting bias
-df_filtered = df[df["volume"] >= 1.0]
-
-# Keep only years present in both countries
-common_years = df_filtered[df_filtered["country"].isin(["USA", "Canada"])]["year"].unique()
-df_filtered = df_filtered[df_filtered["year"].isin(common_years)]
-
-# Group by year and country
-norm_year = (
-    df_filtered.groupby(["year", "country"])
-               .size()
-               .reset_index(name="count")
-)
-
-# Map pipeline lengths
-PIPELINE_LENGTH_KM = {
-    "USA": 3_000_000,
-    "Canada": 840_000
-}
-norm_year["pipeline_km"] = norm_year["country"].map(PIPELINE_LENGTH_KM)
-
-# Normalize: incidents per 10k km per year
-NORMALIZATION_FACTOR = 10_000
-norm_year["incidents_per_10k_km_per_year"] = (
-    norm_year["count"] / norm_year["pipeline_km"] * NORMALIZATION_FACTOR
-)
-
-# Add 3-year rolling average to smooth trends
-norm_year["rolling_3yr"] = norm_year.groupby("country")["incidents_per_10k_km_per_year"].transform(
-    lambda x: x.rolling(3, min_periods=1).mean()
-)
-
-# Plot
-fig_norm = px.line(
-    norm_year,
-    x="year",
-    y="rolling_3yr",
-    color="country",
-    markers=True,
-    template=PLOT_TEMPLATE
-)
-
-fig_norm.update_layout(
-    yaxis_title="Incidents per 10,000 km (3-yr rolling avg)",
-    xaxis_title="Year"
-)
-
-st.plotly_chart(fig_norm, use_container_width=True)
-
-
-
-# ---------------------------
 # Volume distribution
 # ---------------------------
 
@@ -315,10 +251,6 @@ fig_box.update_layout(
 )
 
 st.plotly_chart(fig_box, use_container_width=True)
-
-
-
-
 
 # ---------------------------
 # Cumulative released volume
