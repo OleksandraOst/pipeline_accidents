@@ -119,7 +119,7 @@ if len(df_plot) > 3000:
 # MAP
 # ===========================
 
-st.subheader("🗺️ Geospatial distribution")
+st.subheader("🗺️ Spatial Distribution of Pipeline Incidents")
 
 fig_map = px.scatter_mapbox(
     df_plot,
